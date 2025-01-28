@@ -1,0 +1,34 @@
+# Base compose file with common settings
+version: '3.8'
+
+services:
+  ollama:
+    build: .
+    container_name: deepseek-ollama
+    environment:
+      - MODEL_SIZE=${MODEL_SIZE:-1.5b}
+    volumes:
+      - ollama-models:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: deepseek-webui
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - ENV=prod
+      - PORT=8080
+      - SCARF_NO_ANALYTICS=true
+      - DO_NOT_TRACK=true
+      - ANONYMIZED_TELEMETRY=false
+    volumes:
+      - webui-data:/app/backend/data
+    depends_on:
+      - ollama
+
+volumes:
+  ollama-models:
+  webui-data:

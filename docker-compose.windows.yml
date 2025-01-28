@@ -1,0 +1,14 @@
+# Windows GPU override for WSL2
+version: '3.8'
+
+services:
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Add WSL2 specific settings
+    runtime: nvidia
