@@ -1,6 +1,4 @@
 # Base compose file with common settings
-version: '3.8'
-
 services:
   ollama:
     build: .

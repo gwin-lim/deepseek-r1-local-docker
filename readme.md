@@ -17,9 +17,9 @@ This repository provides a dockerized environment for running DeepSeek R1 models
 ### Prerequisites
 
 - Make(if running on Windows via WSL2 install using `sudo apt-get install make`)
-- Docker and Docker Compose
+- Docker and Docker Compose `make install-docker`
 
-To allow docker to make use of GPU acceleration on Linux or Windows via WSL2, you need to install the NVIDIA Container Toolkit. For MacOS, this is not required and should just work (althought not tested as of yet).
+To allow docker to make use of GPU acceleration on Linux or Windows via WSL2, you need to install the NVIDIA Container Toolkit. For MacOS, this is not required and should just work (althought not tested as of yet). For Windows native/docker desktop, gpu support is not currently supported.
 
 - For GPU Support you'll need:
   - NVIDIA GPU
@@ -27,24 +27,25 @@ To allow docker to make use of GPU acceleration on Linux or Windows via WSL2, yo
     - NVIDIA Container Toolkit (see [available commands](#available-commands): `setup-gpu`)
   - If running on Windows:
     - WSL2
-    - Docker Desktop with WSL2 backend
+    - Docker 
     - NVIDIA Container Toolkit (see [available commands](#available-commands): `setup-gpu`)
   - If running on MacOS:
      - No additional requirements
 
 ### Setup
 
-1. GPU Setup (Optional but recommended)
+1. Install Docker and Docker Compose:
+```bash
+make install-docker
+```
+
+2. GPU Setup (Optional but recommended)
    - If using GPU on Linux or on Windows via WSL2 using bash:
      1. Run the setup script:
         ```bash
         make setup-gpu
         ```
-     2. Test GPU access:
-        ```bash
-        docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu22.04 nvidia-smi
-        ```
-        If successful, you should see something like this:
+      If successful, you should see something like this:
         ![GPU Test](./images/gpu-test.png)
 
 
@@ -52,17 +53,17 @@ To allow docker to make use of GPU acceleration on Linux or Windows via WSL2, yo
 
    **Linux with GPU:**
    ```bash
-   docker compose -f docker-compose.yml -f docker-compose.linux.yml up -d
+   sudo docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
    ```
 
    **macOS with GPU (Metal):**
    ```bash
-   docker compose -f docker-compose.yml -f docker-compose.mac.yml up -d
+   sudo docker compose -f docker-compose.yml -f docker-compose.mac.yml up -d
    ```
 
    **CPU Only / Windows (native, simplest but slowest):**
    ```bash
-   docker compose up -d
+   sudo docker compose up -d
    ```
 
     **Windows (with GPU, WSL2):**
@@ -89,14 +90,14 @@ To allow docker to make use of GPU acceleration on Linux or Windows via WSL2, yo
 1. **WSL2 (Recommended for GPU support)**
    - Requires WSL2, NVIDIA CUDA drivers, and Docker Desktop with WSL2 backend
    ```bash
-   docker compose -f docker-compose.yml -f docker-compose.windows.yml up -d
+   sudo docker compose -f docker-compose.yml -f docker-compose.gpu.yml -f docker-compose.windows.yml up -d
    ```
 
 2. **Native Windows (CPU-only)**
    - Install Docker Desktop for Windows
    - No WSL2 required
    ```bash
-   docker compose up -d
+   sudo docker compose up -d
    ```
 
 
@@ -109,26 +110,48 @@ Just point your browser to `http://localhost:8080`
 
 ### CLI Interactive Terminal:
   ```bash
-  docker exec -it deepseek-ollama ollama run deepseek-r1:1.5b
+  sudo docker exec -it deepseek-ollama ollama run deepseek-r1:1.5b
   ```
 
   ![CLI](./images/interactive-terminal.png)
 
 ## Using Different Model/Parameter Sizes
 
-By default the 1.5bn parameter model pulled and used locally. This is the smallest model and will get you up and running most quickly. You may find that the 7bn or 8bn parameter models offer a better balance of quality and speed however.
+By default the 1.5bn parameter model is pulled and used locally. This is the smallest model and will get you up and running most quickly. You may find that the 7bn or 8bn parameter models offer a better balance of quality and speed however.
 
 Full list of models/param counts can be found at [r1 versions](https://ollama.com/library/deepseek-r1).
 
-To use a different model size, you can:
+To use a different model size:
 
+1. Stop the containers: 
+```bash
+docker compose down ollama
+```
 
-1. Stop the containers: `docker compose down`
-2. Set the MODEL_SIZE environment variable: `export MODEL_SIZE=14b`
-3. Restart: `docker compose up -d`
+2. Set the MODEL_SIZE environment variable and rebuild ollama:
+```bash
+export MODEL_SIZE=8b
 
-Or modify the model size in docker-compose.yml directly.
+3. Rebuild and start the container:
+```bash
+docker compose up -d --build ollama
+```
 
+Alternatively, you can modify the MODEL_SIZE in docker-compose.yml directly by changing:
+```yaml
+environment:
+  - MODEL_SIZE=${MODEL_SIZE:-1.5b}
+```
+to:
+```yaml
+environment:
+  - MODEL_SIZE=8b
+```
+
+Then run:
+```bash
+docker compose up -d --build ollama
+```
 
 ### Notes on parameters
 
