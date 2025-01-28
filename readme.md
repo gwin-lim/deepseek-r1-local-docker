@@ -2,7 +2,7 @@
 
 This repository provides a dockerized environment for running DeepSeek R1 models locally via docker. You can interact with the model via browser using Open WebUI, via CLI using Ollama.
 
-## Quick Start
+## TLDR; | Quickstart
 
 1. Clone the repository
 2. Run `docker compose up -d`
@@ -11,27 +11,31 @@ This repository provides a dockerized environment for running DeepSeek R1 models
 ![Web UI](./images/web-new.png)
 
 
-## Setup
+## Now, RTFM (probably)
 
 
 ### Prerequisites
 
-- Make (if running on Windows via WSL2 install using `sudo apt-get install make`)
-
+- Make(if running on Windows via WSL2 install using `sudo apt-get install make`)
 - Docker and Docker Compose
-- For GPU Support
+
+To allow docker to make use of GPU acceleration on Linux or Windows via WSL2, you need to install the NVIDIA Container Toolkit. For MacOS, this is not required and should just work (althought not tested as of yet).
+
+- For GPU Support you'll need:
   - NVIDIA GPU
-  - Linux & Windows via WSL2:
+  - If running on Linux:
     - NVIDIA Container Toolkit (see [available commands](#available-commands): `setup-gpu`)
-  - Windows:
+  - If running on Windows:
     - WSL2
     - Docker Desktop with WSL2 backend
+    - NVIDIA Container Toolkit (see [available commands](#available-commands): `setup-gpu`)
+  - If running on MacOS:
+     - No additional requirements
 
-
-### Setup Steps
+### Setup
 
 1. GPU Setup (Optional but recommended)
-   - If using GPU on Linux or on Windows via WSL2:
+   - If using GPU on Linux or on Windows via WSL2 using bash:
      1. Run the setup script:
         ```bash
         make setup-gpu
@@ -40,6 +44,10 @@ This repository provides a dockerized environment for running DeepSeek R1 models
         ```bash
         docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu22.04 nvidia-smi
         ```
+        If successful, you should see something like this:
+        ![GPU Test](./images/gpu-test.png)
+
+
 2. Start the containers:
 
    **Linux with GPU:**
@@ -61,8 +69,14 @@ This repository provides a dockerized environment for running DeepSeek R1 models
 
    See [Additional Notes for Windows Users](#additional-notes-for-windows-users)
 
+   After running the above you should see something like this:
+
+   ![Docker compose up](./images/docker-up.png)
+
 
 3. Access the Web UI at: `http://localhost:8080`
+
+![Web UI](./images/web-new.png)
 
 **Note:** The first startup may take quite a long time as it downloads the model (1.1GB for the default 1.5bn model). The model will be stored in a Docker volume (`ollama-models`) and persisted between container restarts so this is a one-time cost.
 
