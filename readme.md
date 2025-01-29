@@ -11,6 +11,10 @@ Access the interface at `http://localhost:8080`
 
 ![Web UI](images/web-new.png)
 
+### CLI
+```bash
+docker exec -it deepseek-ollama ollama run deepseek-r1:1.5b "What is the capital of France?"
+```
 ### CLI Interactive Terminal
 ```bash
 docker exec -it deepseek-ollama ollama run deepseek-r1:1.5b
