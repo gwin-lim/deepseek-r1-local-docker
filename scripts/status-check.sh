@@ -7,16 +7,23 @@ WEBUI_PORT=${WEBUI_PORT:-8080}
 # ANSI color codes - fix escaping
 GREEN='\e[32m'
 RED='\e[31m'
+BLUE='\e[34m'
 NC='\e[0m'
+
+echo -e "\n${BLUE}Starting DeepSeek status check...${NC}"
+echo -e "Checking container: ${CONTAINER_NAME}"
+echo -e "WebUI port: ${WEBUI_PORT}\n"
 
 # Function to check if container is running
 check_container() {
+    echo -n "Checking container status... "
     # Try up to 30 times (30 seconds total)
     for i in {1..30}; do
         if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+            echo -e "${GREEN}running${NC}"
             return 0
         fi
-        echo -ne "\rWaiting for container to start... (${i}/30)   \r"
+        echo -ne "\rChecking container status... (attempt ${i}/30)   "
         sleep 1
     done
     echo -e "\n${RED}Error:${NC} Container '${CONTAINER_NAME}' is not running after 30 seconds"
@@ -69,14 +76,17 @@ while true; do
     # Check if server is ready
     if docker logs $CONTAINER_NAME 2>&1 | grep -F "🚀 Ollama is ready!" > /dev/null; then
         # Check WebUI status first
+        echo -n "Checking WebUI... "
         if check_webui; then
             webui_status="running $(echo -e "${GREEN}✓${NC}")"
+            echo -e "${GREEN}ready${NC}"
         else
             webui_status="not responding $(echo -e "${RED}✗${NC}")"
+            echo -e "${RED}not responding${NC}"
         fi
 
         # Extract and display the details section
-        echo -e "\nDone!"
+        echo -e "\n${GREEN}All checks complete!${NC}\n"
         # Only show the last occurrence of each status line
         docker logs $CONTAINER_NAME 2>&1 | sed -n '/^   - /p' | awk '!seen[$0]++' | tail -n 3 | sed "s/✓/$(echo -e "${GREEN}✓${NC}")/"
         echo -e "   - WebUI status: $webui_status"
@@ -87,6 +97,11 @@ while true; do
         fi
         exit 0
     else
+        if [ -z "$checking_message_shown" ]; then
+            echo "Checking Ollama server status..."
+            checking_message_shown=1
+        fi
+
         # Extract progress information using grep and sed
         progress_line=$(docker logs $CONTAINER_NAME 2>&1 | grep -F "pulling" | tail -n 1)
 
