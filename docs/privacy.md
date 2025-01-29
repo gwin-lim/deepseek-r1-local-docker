@@ -10,6 +10,8 @@ To monitor the TCP connections initiated by the containers, run `make setup-watc
 
 ![Setup](../images/watch-tcp-setup.png)
 
+You'll also need to ensure that you have python3 installed and available in your path as `python3`.
+
 ### Watching the TCP connections
 
 #### All TCP connections
