@@ -23,3 +23,6 @@ docker-up-cpu-only:
 
 watch-gpu:
 	@watch -n 0.5 nvidia-smi
+
+clean-up:
+	@sudo docker compose down
