@@ -16,6 +16,14 @@ docker exec -it deepseek-ollama ollama run deepseek-r1:1.5b
 
 ![CLI](images/interactive-terminal.png)
 
+## Additional Information
+
+- [Linux Setup and GPU Support](docs/linux.md)
+- [Windows Setup and GPU Support](docs/windows.md)
+- [Mac Setup and GPU Support](docs/mac.md)
+- [Environment Variables](docs/envvars.md)
+- [Appendix/FAQ](docs/appendix.md)
+
 ## Quick Start
 
 1. Install Docker and Docker Compose (see your OS-specific guide)
@@ -44,11 +52,6 @@ When first starting the container, the model will be downloaded. This may take a
 To check the progress of the model download, run `docker logs -f deepseek-ollama`:
 
 ![Model Download](images/model-pull-startup-progress.png)
-
-For GPU support and OS-specific setup instructions, see:
-- [Windows Setup Guide](WINDOWS.md)
-- [Linux/WSL2 GPU Setup Guide](LINUX_GPU.md)
-
 
 ## Available Models
 

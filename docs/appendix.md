@@ -2,6 +2,36 @@
 
 Extra information that doesn't fit in the main documentation.
 
+## Make Commands
+
+The project includes several make commands to simplify common operations. These commands handle everything from setup to monitoring GPU usage.
+
+### Setup Commands
+- `make install-docker` - Installs Docker and all required dependencies
+- `make setup-gpu` - Installs NVIDIA drivers and GPU dependencies
+- `make test-gpu` - Runs a test container to verify GPU availability and driver installation
+
+### Start Commands
+- `make docker-up-linux-gpu` - Starts containers with GPU support on Linux.
+
+  *Equivalent to:* `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d`
+
+- `make docker-up-mac-gpu` - Starts containers with GPU support on macOS.
+
+  *Equivalent to:* `docker compose -f docker-compose.yml -f docker-compose.mac.yml up -d`
+
+- `make docker-up-windows-gpu` - Starts containers with GPU support on Windows.
+
+  *Equivalent to:* `docker compose -f docker-compose.yml -f docker-compose.gpu.yml -f docker-compose.windows.yml up -d`
+
+- `make docker-up-cpu-only` - Starts containers without GPU support (CPU only mode).
+
+  *Equivalent to:* `docker compose up -d`
+
+### Utility Commands
+- `make watch-gpu` - Shows real-time GPU usage statistics (updates every 0.5 seconds)
+- `make clean-up` - Stops and removes all running containers
+
 ## FAQ
 
 ### How do I see if the service is running?
