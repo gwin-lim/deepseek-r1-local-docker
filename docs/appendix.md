@@ -10,6 +10,7 @@ The project includes several make commands to simplify common operations. These 
 - `make install-docker` - Installs Docker and all required dependencies
 - `make setup-gpu` - Installs NVIDIA drivers and GPU dependencies
 - `make test-gpu` - Runs a test container to verify GPU availability and driver installation
+- `make setup-watch-tcp` - Sets up the logging chain required for TCP connection monitoring
 
 ### Start Commands
 - `make docker-up-linux-gpu` - Starts containers with GPU support on Linux.
@@ -28,8 +29,13 @@ The project includes several make commands to simplify common operations. These 
 
   *Equivalent to:* `docker compose up -d`
 
-### Utility Commands
+### Monitoring Commands
 - `make watch-gpu` - Shows real-time GPU usage statistics (updates every 0.5 seconds)
+- `make watch-tcp-raw` - Shows raw TCP connection data from containers in real-time
+- `make watch-tcp` - Shows color-coded TCP connection data from containers in real-time
+- `make watch-tcp-external-only` - Shows color-coded TCP connection data from containers to the outside world in real-time
+
+### Utility Commands
 - `make clean-up` - Stops and removes all running containers
 
 ## FAQ

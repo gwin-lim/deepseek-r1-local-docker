@@ -5,13 +5,13 @@
 setup-gpu:
 	@sudo ./scripts/setup-gpu.sh
 
-# Install Docker and required dependencies
-install-docker:
-	@sudo ./scripts/install-docker.sh
-
 # Test GPU availability and NVIDIA driver installation by running a test container
 test-gpu:
 	@docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu22.04 nvidia-smi
+
+# Install Docker and required dependencies
+install-docker:
+	@sudo ./scripts/install-docker.sh
 
 # Start Docker containers with GPU support on Linux
 docker-up-linux-gpu:
@@ -32,6 +32,25 @@ docker-up-cpu-only:
 # Monitor GPU usage and statistics in real-time (updates every 0.5 seconds)
 watch-gpu:
 	@watch -n 0.5 nvidia-smi
+
+# Setup the logging chain for TCP monitoring
+setup-watch-tcp:
+	@sudo ./scripts/watch-tcp-setup.sh
+
+# Watch TCP connections initiated by the containers, in real-time
+watch-tcp-raw:
+	@echo "Watching TCP connections initiated by the containers..."
+	@sudo ./scripts/watch-tcp.sh
+
+# Watch TCP connections in real-time with color-coded output
+watch-tcp:
+	@echo "Watching TCP connections initiated by the containers..."
+	@sudo ./scripts/watch-tcp.sh | python3 ./scripts/log_parser.py
+
+# Watch only the TCP connections to the outside world that are initiated by the containers
+watch-tcp-external-only:
+	@echo "Watching TCP connections to the outside world initiated by the containers..."
+	@sudo ./scripts/watch-tcp.sh | python3 ./scripts/log_parser.py --external-only
 
 # Stop and remove all running containers
 clean-up:

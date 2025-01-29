@@ -2,6 +2,8 @@
 
 Run DeepSeek R1 models locally using Docker. Interact with the model through a browser-based UI or CLI using Ollama.
 
+If you're concerned about the privacy considerations of using a cloud-based model, this is the solution for you.
+
 ## Model Interaction Methods
 
 ### Web UI
@@ -22,6 +24,7 @@ docker exec -it deepseek-ollama ollama run deepseek-r1:1.5b
 - [Windows Setup and GPU Support](docs/windows.md)
 - [Mac Setup and GPU Support](docs/mac.md)
 - [Environment Variables](docs/envvars.md)
+- [Privacy and the CCP](docs/privacy.md)
 - [Appendix/FAQ](docs/appendix.md)
 
 ## Quick Start
@@ -86,7 +89,9 @@ environment:
   - MODEL_SIZE=8b
 ```
 
-## Model Size Requirements
+## Suggested Hardware Requirements
+
+In reality, you might get away with less. Alternatively, if your expecting instant responses, you may need more. So use this as a rough guide.
 
 | Parameters | RAM | GPU | Storage | CPU | Model Size |
 |------------|-----|-----|---------|-----|------------|

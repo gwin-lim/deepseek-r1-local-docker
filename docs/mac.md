@@ -2,6 +2,8 @@
 
 This guide covers setting up DeepSeek R1 Local on macOS, including both CPU and GPU (Metal) support.
 
+**Note:** I have not tested this on macOS. I've only verifed on Linux(Ubuntu) and Windows.
+
 ## Prerequisites
 
 - macOS 10.15 or later
