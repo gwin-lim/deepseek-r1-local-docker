@@ -1,2 +1,9 @@
 venv/
 coverage/
+ollama-models/**/*
+!ollama-models/.gitkeep
+webui-data/**/*
+!webui-data/.gitkeep
+
+.env
+.env.*
