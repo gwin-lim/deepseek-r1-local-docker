@@ -2,19 +2,23 @@
 services:
   ollama:
     build: .
+    env_file:
+      - .env
     container_name: ${OLLAMA_CONTAINER_NAME:-deepseek-ollama}
     environment:
       - MODEL_SIZE=${MODEL_SIZE:-1.5b}
     volumes:
       - ollama-models:/root/.ollama
     ports:
-      - "${OLLAMA_PORT:-11434}:11434"
+      - '${OLLAMA_PORT:-11434}:11434'
 
   webui:
     image: ghcr.io/open-webui/open-webui:main
+    env_file:
+      - .env
     container_name: ${WEBUI_CONTAINER_NAME:-deepseek-webui}
     ports:
-      - "${WEBUI_PORT:-8080}:8080"
+      - '${WEBUI_PORT:-8080}:8080'
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - ENV=${ENVIRONMENT:-prod}
